@@ -37,6 +37,7 @@ resolver: lts-7.16
 # will not be run. This is useful for tweaking upstream packages.
 packages:
 - '.'
+- ../../haskell-src/QuickCheck-2.9.2
 # Dependency packages to be pulled from upstream that are not in the resolver
 # (e.g., acme-missiles-0.3)
 extra-deps: []
