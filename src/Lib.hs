@@ -15,11 +15,12 @@ instance Monoid Armoury where
     mappend x y = Armoury { daggers = daggers x + daggers y, swords = swords x + swords y }
 
 class Monoid bag => Insertable nut bag where
-    (<#), (#>), iput :: nut -> bag -> bag
+    (#>), iput :: nut -> bag -> bag
+    (<#)       :: bag -> nut -> bag
     -- ifold :: (Foldable bunch) => bunch nut -> bag
     infixl 9 <#
     infixr 9 #>
-    (<#) = iput
+    (<#) = flip iput
     (#>) = iput
 
 instance Insertable Dagger Armoury where
@@ -31,7 +32,7 @@ instance Insertable Sword Armoury where
 
 exampleWithDagger = Dagger #> Dagger #> mempty :: Armoury
 
-exampleWithSword = Sword #> Sword #> mempty :: Armoury
+exampleWithSword = mempty <# Sword <# Sword :: Armoury
 
 instance (Monoid bag) => Insertable bag bag where
     iput = mappend
