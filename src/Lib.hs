@@ -49,3 +49,28 @@ instance (Foldable bunch, Insertable nut bag) => Insertable (bunch nut) bag wher
 
 exampleWithBunch = [Dagger, Dagger] #> exampleWithSword #> exampleWithDagger
 
+data Daggers = Daggers [Dagger]
+
+data Swords = Swords [Sword]
+
+instance Monoid Daggers where
+    mempty = Daggers []
+    mappend (Daggers x) (Daggers y) = Daggers $ x `mappend` y
+
+instance Monoid Swords where
+    mempty = Swords []
+    mappend (Swords x) (Swords y) = Swords $ x `mappend` y
+
+instance Insertable Dagger Daggers where
+    iput dagger (Daggers daggers) = Daggers $ dagger:daggers
+
+instance Insertable Sword Swords where
+    iput sword (Swords swords) = Swords $ sword:swords
+
+instance Insertable Daggers Armoury where
+    daggers #> armoury = Armoury { daggers = (\(Daggers x) -> fromIntegral . length $ x) daggers, swords = 0 }
+
+instance Insertable Swords Armoury where
+    swords #> armoury = Armoury { swords = (\(Swords x) -> fromIntegral . length $ x) swords, daggers = 0 }
+
+exampleWithDaggersAndSwords = Dagger #> Sword #> [Dagger, Dagger] #> Daggers [Dagger, Dagger] #> Swords [] #> (mempty :: Armoury)

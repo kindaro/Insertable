@@ -8,3 +8,4 @@ main = do
     print exampleWithSword
     print exampleWithDaggerAndSword
     print exampleWithBunch
+    print exampleWithDaggersAndSwords
