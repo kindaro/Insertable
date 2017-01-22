@@ -7,8 +7,8 @@ someFunc :: IO ()
 someFunc = putStrLn "someFunc"
 
 data Armoury = Armoury { daggers :: Integer, swords :: Integer } deriving Show
-data Dagger = Dagger
-data Sword = Sword
+data Dagger = Dagger deriving Show
+data Sword = Sword deriving Show
 
 instance Monoid Armoury where
     mempty = Armoury 0 0
@@ -49,9 +49,8 @@ instance (Foldable bunch, Insertable nut bag) => Insertable (bunch nut) bag wher
 
 exampleWithBunch = [Dagger, Dagger] #> exampleWithSword #> exampleWithDagger
 
-data Daggers = Daggers [Dagger]
-
-data Swords = Swords [Sword]
+data Daggers = Daggers [Dagger] deriving Show
+data Swords = Swords [Sword] deriving Show
 
 instance Monoid Daggers where
     mempty = Daggers []
