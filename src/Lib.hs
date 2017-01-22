@@ -35,6 +35,10 @@ exampleWithDagger = Dagger #> Dagger #> mempty :: Armoury
 exampleWithSword = mempty <# Sword <# Sword :: Armoury
 
 instance (Monoid bag) => Insertable bag bag where
+    -- It's actually always monoid, I could drop the qualifier if type system were clever.
+    -- In particular, the second "bag" here is set to be Monoid in the Insertable class declaration.
+    -- The type checker at present (ghc 8.0.1) can't infer that the first "bag" here is also (the
+    -- same) Monoid.
     iput = mappend
 
 exampleWithDaggerAndSword = exampleWithDagger #> exampleWithSword
