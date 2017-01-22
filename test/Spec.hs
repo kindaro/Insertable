@@ -30,7 +30,11 @@ main = do
     sequence_ . fmap print =<< generate (listOf1 (listOf1 (arbitrary :: Gen S) >>= foldList'))
     putStrLn "-> Expectation of values of random Armoury..."
     generate (listOf1 (listOf1 (arbitrary :: Gen S) >>= foldList'))
-        >>= print . (average . fst &&& average . snd) . unzip . fmap ((fromIntegral . daggers &&& fromIntegral . swords) . (\(PArmoury x) -> x))
+        >>= ( fmap (\(PArmoury x) -> x)
+            >>> fmap (fromIntegral . daggers &&& fromIntegral . swords)
+            >>> unzip
+            >>> (average . fst &&& average . snd)
+            >>> print )
 
     where
         average :: Fractional a => [a] -> a
