@@ -6,3 +6,4 @@ main :: IO ()
 main = do
     print exampleWithDagger
     print exampleWithSword
+    print exampleWithDaggerAndSword

@@ -1,4 +1,5 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE FlexibleInstances #-}
 
 module Lib where
 
@@ -31,3 +32,8 @@ instance Insertable Sword Armoury where
 exampleWithDagger = Dagger #> Dagger #> mempty :: Armoury
 
 exampleWithSword = Sword #> Sword #> mempty :: Armoury
+
+instance (Monoid bag) => Insertable bag bag where
+    iput = mappend
+
+exampleWithDaggerAndSword = exampleWithDagger #> exampleWithSword
