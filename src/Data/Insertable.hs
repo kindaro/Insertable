@@ -70,3 +70,4 @@ exampleWithDaggersAndSwords
     #> [Dagger, Dagger]
     #> Daggers [Dagger, Dagger] #> Swords []
     #> (mempty :: Armoury)
+exampleWithDaggers = (mempty :: Daggers) #> (mempty :: Daggers)

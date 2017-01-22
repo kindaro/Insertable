@@ -9,3 +9,4 @@ main = do
     print exampleWithDaggerAndSword
     print exampleWithBunch
     print exampleWithDaggersAndSwords
+    print exampleWithDaggers
