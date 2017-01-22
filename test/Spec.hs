@@ -31,7 +31,10 @@ main = do
         average :: Fractional a => [a] -> a
         average xs = (sum xs) / (fromIntegral . length $ xs)
 
+foldList :: [S] -> IO P
 foldList = fmap (foldr (#>) (PArmoury mempty)) . sequence . fmap strategy . sort
+
+foldList' :: [S] -> Gen P
 foldList' = fmap (foldr (#>) (PArmoury mempty)) . sequence . fmap strategy' . sort
 
 propMinBound :: [Armoury] -> Property
