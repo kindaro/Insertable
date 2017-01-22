@@ -3,9 +3,6 @@
 
 module Data.Insertable where
 
-someFunc :: IO ()
-someFunc = putStrLn "someFunc"
-
 data Armoury = Armoury { daggers :: Integer, swords :: Integer } deriving Show
 data Dagger = Dagger deriving Show
 data Sword = Sword deriving Show
