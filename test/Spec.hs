@@ -6,6 +6,7 @@ module Main where
 
 import Data.List
 import Test.QuickCheck
+import Control.Arrow
 
 import Data.Insertable
 
@@ -23,6 +24,12 @@ main = do
     sample' (arbitrary :: Gen S) >>= foldList >>= print
     generate (arbitrary :: Gen P) >>= print
     sequence_ . fmap print =<< generate (listOf1 (listOf1 (arbitrary :: Gen S) >>= foldList'))
+    generate (listOf1 (listOf1 (arbitrary :: Gen S) >>= foldList'))
+        >>= print . (average . fst &&& average . snd) . unzip . fmap ((fromIntegral . daggers &&& fromIntegral . swords) . (\(PArmoury x) -> x))
+
+    where
+        average :: Fractional a => [a] -> a
+        average xs = (sum xs) / (fromIntegral . length $ xs)
 
 foldList = fmap (foldr (#>) (PArmoury mempty)) . sequence . fmap strategy . sort
 foldList' = fmap (foldr (#>) (PArmoury mempty)) . sequence . fmap strategy' . sort
