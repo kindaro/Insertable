@@ -38,3 +38,9 @@ instance (Monoid bag) => Insertable bag bag where
     iput = mappend
 
 exampleWithDaggerAndSword = exampleWithDagger #> exampleWithSword
+
+instance (Foldable bunch, Insertable nut bag) => Insertable (bunch nut) bag where
+    iput = flip (foldr iput)
+
+exampleWithBunch = [Dagger, Dagger] #> exampleWithSword #> exampleWithDagger
+
