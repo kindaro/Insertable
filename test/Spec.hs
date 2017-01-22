@@ -19,11 +19,16 @@ instance Arbitrary Armoury where
 
 main :: IO ()
 main = do
+    putStrLn "-> Armoury bounds..."
     quickCheck propMinBound
     quickCheck propMaxBound
+    putStrLn "-> S sample fold..."
     sample' (arbitrary :: Gen S) >>= foldList >>= print
+    putStrLn "-> P generator..."
     generate (arbitrary :: Gen P) >>= print
+    putStrLn "-> Sample of sample P folds..."
     sequence_ . fmap print =<< generate (listOf1 (listOf1 (arbitrary :: Gen S) >>= foldList'))
+    putStrLn "-> Expectation of values of random Armoury..."
     generate (listOf1 (listOf1 (arbitrary :: Gen S) >>= foldList'))
         >>= print . (average . fst &&& average . snd) . unzip . fmap ((fromIntegral . daggers &&& fromIntegral . swords) . (\(PArmoury x) -> x))
 
