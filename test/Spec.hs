@@ -36,9 +36,15 @@ main = do
             >>> (average . fst &&& average . snd)
             >>> print )
 
+    putStrLn "-> Testing mathexpectation of S..."
+    (generate $ resize (2^20) $ listOf1 (arbitrary :: Gen S)) >>= print . frequency
+
     where
         average :: Fractional a => [a] -> a
         average xs = (sum xs) / (fromIntegral . length $ xs)
+
+        frequency :: Ord a => [a] -> [(Int, a)]
+        frequency list = map (\l -> (length l, head l)) (group (sort list))
 
 foldList :: [S] -> IO P
 foldList = fmap (foldr (#>) (PArmoury mempty)) . sequence . fmap strategy . sort
