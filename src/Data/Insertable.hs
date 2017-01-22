@@ -54,11 +54,11 @@ instance Insertable Sword Swords where
     iput sword (Swords swords) = Swords $ sword:swords
 
 instance Insertable Daggers Armoury where
-    daggers #> armoury = Armoury { daggers = sniffLength daggers, swords = 0 }
+    xs #> armoury = Armoury { daggers = sniffLength xs, swords = swords armoury }
         where sniffLength (Daggers x) = fromIntegral . length $ x
 
 instance Insertable Swords Armoury where
-    swords #> armoury = Armoury { swords = sniffLength swords, daggers = 0 }
+    xs #> armoury = Armoury { swords = sniffLength xs, daggers = daggers armoury }
         where sniffLength (Swords x) = fromIntegral . length $ x
 
 exampleWithDagger = Dagger #> Dagger #> mempty :: Armoury
