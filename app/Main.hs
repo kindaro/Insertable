@@ -1,6 +1,6 @@
 module Main where
 
-import Lib
+import Data.Insertable
 
 main :: IO ()
 main = do

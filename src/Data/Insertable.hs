@@ -1,7 +1,7 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE FlexibleInstances #-}
 
-module Lib where
+module Data.Insertable where
 
 someFunc :: IO ()
 someFunc = putStrLn "someFunc"
