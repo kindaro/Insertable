@@ -22,6 +22,7 @@ class Monoid bag => Insertable nut bag where
     infixr 9 #>
     (<#) = flip iput
     (#>) = iput
+    iput = (#>)
 
 instance Insertable Dagger Armoury where
     iput x xs = xs { daggers = daggers xs + 1 }
