@@ -65,7 +65,7 @@ propMaxBound xs =
     in
         True ==> daggers z <= (l * 96) && swords z <= (l * 96)
 
-data S = SDagger | SSword | SDaggers | SSwords | SArmoury deriving (Enum, Eq, Ord)
+data S = SDagger | SSword | SDaggers | SSwords | SArmoury deriving (Enum, Eq, Ord, Show)
 
 data P  = PDagger Dagger
         | PSword Sword
