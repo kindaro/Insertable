@@ -3,13 +3,11 @@
 
 module Data.Insertable where
 
+data Dagger  = Dagger                                            deriving Show
+data Sword   = Sword                                             deriving Show
+data Daggers = Daggers [Dagger]                                  deriving Show
+data Swords  = Swords [Sword]                                    deriving Show
 data Armoury = Armoury { daggers :: Integer, swords :: Integer } deriving Show
-data Dagger = Dagger deriving Show
-data Sword = Sword deriving Show
-
-instance Monoid Armoury where
-    mempty = Armoury 0 0
-    mappend x y = Armoury { daggers = daggers x + daggers y, swords = swords x + swords y }
 
 class Monoid bag => Insertable nut bag where
     (#>), iput :: nut -> bag -> bag
@@ -21,17 +19,6 @@ class Monoid bag => Insertable nut bag where
     (#>) = iput
     iput = (#>)
 
-instance Insertable Dagger Armoury where
-    iput x xs = xs { daggers = daggers xs + 1 }
-
-instance Insertable Sword Armoury where
-    iput x xs = xs { swords = swords xs + 1 }
-
-
-exampleWithDagger = Dagger #> Dagger #> mempty :: Armoury
-
-exampleWithSword = mempty <# Sword <# Sword :: Armoury
-
 instance (Monoid bag) => Insertable bag bag where
     -- It's actually always monoid, I could drop the qualifier if type system were clever.
     -- In particular, the second "bag" here is set to be Monoid in the Insertable class declaration.
@@ -39,15 +26,12 @@ instance (Monoid bag) => Insertable bag bag where
     -- same) Monoid.
     iput = mappend
 
-exampleWithDaggerAndSword = exampleWithDagger #> exampleWithSword
-
 instance (Foldable bunch, Insertable nut bag) => Insertable (bunch nut) bag where
     iput = flip (foldr iput)
 
-exampleWithBunch = [Dagger, Dagger] #> exampleWithSword #> exampleWithDagger
-
-data Daggers = Daggers [Dagger] deriving Show
-data Swords = Swords [Sword] deriving Show
+instance Monoid Armoury where
+    mempty = Armoury 0 0
+    mappend x y = Armoury { daggers = daggers x + daggers y, swords = swords x + swords y }
 
 instance Monoid Daggers where
     mempty = Daggers []
@@ -57,6 +41,12 @@ instance Monoid Swords where
     mempty = Swords []
     mappend (Swords x) (Swords y) = Swords $ x `mappend` y
 
+instance Insertable Dagger Armoury where
+    iput x xs = xs { daggers = daggers xs + 1 }
+
+instance Insertable Sword Armoury where
+    iput x xs = xs { swords = swords xs + 1 }
+
 instance Insertable Dagger Daggers where
     iput dagger (Daggers daggers) = Daggers $ dagger:daggers
 
@@ -64,9 +54,19 @@ instance Insertable Sword Swords where
     iput sword (Swords swords) = Swords $ sword:swords
 
 instance Insertable Daggers Armoury where
-    daggers #> armoury = Armoury { daggers = (\(Daggers x) -> fromIntegral . length $ x) daggers, swords = 0 }
+    daggers #> armoury = Armoury { daggers = sniffLength daggers, swords = 0 }
+        where sniffLength (Daggers x) = fromIntegral . length $ x
 
 instance Insertable Swords Armoury where
-    swords #> armoury = Armoury { swords = (\(Swords x) -> fromIntegral . length $ x) swords, daggers = 0 }
+    swords #> armoury = Armoury { swords = sniffLength swords, daggers = 0 }
+        where sniffLength (Swords x) = fromIntegral . length $ x
 
-exampleWithDaggersAndSwords = Dagger #> Sword #> [Dagger, Dagger] #> Daggers [Dagger, Dagger] #> Swords [] #> (mempty :: Armoury)
+exampleWithDagger = Dagger #> Dagger #> mempty :: Armoury
+exampleWithSword = mempty <# Sword <# Sword :: Armoury
+exampleWithDaggerAndSword = exampleWithDagger #> exampleWithSword
+exampleWithBunch = [Dagger, Dagger] #> exampleWithSword #> exampleWithDagger
+exampleWithDaggersAndSwords
+    = Dagger #> Sword
+    #> [Dagger, Dagger]
+    #> Daggers [Dagger, Dagger] #> Swords []
+    #> (mempty :: Armoury)
