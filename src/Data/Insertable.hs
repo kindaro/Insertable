@@ -9,7 +9,7 @@ data Daggers = Daggers [Dagger]                                  deriving Show
 data Swords  = Swords [Sword]                                    deriving Show
 data Armoury = Armoury { daggers :: Integer, swords :: Integer } deriving Show
 
-class Monoid bag => Insertable nut bag where
+class Insertable nut bag where
     (#>), iput :: nut -> bag -> bag
     (<#)       :: bag -> nut -> bag
     -- ifold :: (Foldable bunch) => bunch nut -> bag
