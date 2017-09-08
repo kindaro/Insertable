@@ -9,6 +9,7 @@ import Test.QuickCheck
 import Control.Arrow
 
 import Data.Insertable
+import Data.Insertable.Example
 
 instance Arbitrary Armoury where
     arbitrary = do
